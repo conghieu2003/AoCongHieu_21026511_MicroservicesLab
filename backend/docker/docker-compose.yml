@@ -1,0 +1,142 @@
+version: "3.8"
+name: sales-system
+
+services:
+  # PostgreSQL - Cơ sở dữ liệu chính
+  postgres:
+    image: "postgres:13"
+    container_name: postgres-sales-db
+    ports:
+      - "5439:5432"  # Đổi từ 5432 thành 5439 để tránh trùng
+    volumes:
+      - ./data/sales-volume:/var/lib/postgresql/data
+      - ./data/backup:/backup
+    environment:
+      POSTGRES_PASSWORD: 123456Aa
+      POSTGRES_DB: sales_db
+    command: ["postgres"]
+    networks:
+      - sales-network
+    restart: always
+
+  # pgAdmin - Công cụ quản lý PostgreSQL
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-sales
+    ports:
+      - "8390:80"  # Đổi từ 8389 thành 8390
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@sales.vn
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./data/pgadmin-volume:/var/lib/pgadmin
+    networks:
+      - sales-network
+    restart: always
+    depends_on:
+      - postgres
+
+  # API Gateway - Điểm truy cập chính
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway-sales
+    ports:
+      - "3100:3100"  # Đổi từ 3000 thành 3100
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456Aa
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 3100  # Đảm bảo port trong container khớp với host
+    depends_on:
+      - postgres
+      - product-service
+      - order-service
+      - customer-service
+    networks:
+      - sales-network
+    restart: always
+
+  # Product Service - Quản lý sản phẩm
+  product-service:
+    build: ./product-service
+    container_name: product-service-sales
+    ports:
+      - "3101:3101"  # Đổi từ 3001 thành 3101
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456Aa
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 3101  # Đảm bảo port trong container khớp
+    depends_on:
+      - postgres
+    networks:
+      - sales-network
+    restart: always
+
+  # Order Service - Quản lý đơn hàng
+  order-service:
+    build: ./order-service
+    container_name: order-service-sales
+    ports:
+      - "3102:3102"  # Đổi từ 3002 thành 3102
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456Aa
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 3102  # Đảm bảo port trong container khớp
+    depends_on:
+      - postgres
+      - product-service
+    networks:
+      - sales-network
+    restart: always
+
+  # Customer Service - Quản lý khách hàng
+  customer-service:
+    build: ./customer-service
+    container_name: customer-service-sales
+    ports:
+      - "3103:3103"  # Đổi từ 3003 thành 3103
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456Aa
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 3103  # Đảm bảo port trong container khớp
+    depends_on:
+      - postgres
+    networks:
+      - sales-network
+    restart: always
+
+  # Kafka - Message Broker (tùy chọn)
+  kafka:
+    image: 'bitnami/kafka:3.9.0'
+    container_name: kafka-sales
+    hostname: kafka
+    ports:
+      - "9095:9095"  # Đổi từ 9094 thành 9095
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9095
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9095
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    networks:
+      - sales-network
+    restart: always
+
+networks:
+  sales-network:
+    driver: bridge
+
+volumes:
+  sales-volume:
+    driver: local
+  pgadmin-volume:
+    driver: local

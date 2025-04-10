@@ -1,0 +1,10 @@
+server:
+  port: 3001
+spring:
+  datasource:
+    url: jdbc:postgresql://product-db:5432/products_db
+    username: postgres
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: update
