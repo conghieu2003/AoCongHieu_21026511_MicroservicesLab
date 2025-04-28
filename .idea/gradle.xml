@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend/apiGateWay" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../WWW/gradle-8.10-bin/gradle-8.10" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/backend/apiGateWay" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend/customer-services" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../WWW/gradle-8.10-bin/gradle-8.10" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/backend/customer-services" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend/order-services" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../WWW/gradle-8.10-bin/gradle-8.10" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/backend/order-services" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend/product-services" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../WWW/gradle-8.10-bin/gradle-8.10" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/backend/product-services" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+    <option name="parallelModelFetch" value="true" />
+  </component>
+</project>

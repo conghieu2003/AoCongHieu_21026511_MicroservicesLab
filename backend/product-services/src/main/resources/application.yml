@@ -1,10 +1,11 @@
 server:
-  port: 3001
+  port: 8082
+  
 spring:
-  datasource:
-    url: jdbc:postgresql://product-db:5432/products_db
-    username: postgres
-    password: 12345
-  jpa:
-    hibernate:
-      ddl-auto: update
+  application:
+    name: product-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/productdb
+      database: productdb
+      auto-index-creation: true

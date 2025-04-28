@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      # Xóa các môi trường xác thực
+      MONGO_INITDB_DATABASE: admin
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - microservice-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - microservice-network
+    depends_on:
+      - product-services
+      - order-services
+      - customer-services
+
+  product-services:
+    build:
+      context: ./product-services
+    container_name: product-services
+    ports:
+      - "8081:8081"
+    networks:
+      - microservice-network
+    depends_on:
+      - mongodb
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=productdb
+
+  order-services:
+    build:
+      context: ./order-services
+    container_name: order-services
+    ports:
+      - "8082:8082"
+    networks:
+      - microservice-network
+    depends_on:
+      - mongodb
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=orderdb
+
+  customer-services:
+    build:
+      context: ./customer-services
+    container_name: customer-services
+    ports:
+      - "8083:8083"
+    networks:
+      - microservice-network
+    depends_on:
+      - mongodb
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=customerdb
+
+networks:
+  microservice-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
