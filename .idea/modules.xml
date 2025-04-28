@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MicroserviceLab.iml" filepath="$PROJECT_DIR$/.idea/MicroserviceLab.iml" />
-      <module fileurl="file://$PROJECT_DIR$/backend/apiGateWay/apiGateWay.iml" filepath="$PROJECT_DIR$/backend/apiGateWay/apiGateWay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apiGateWay.main.iml" filepath="$PROJECT_DIR$/.idea/modules/apiGateWay.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/customer-services.main.iml" filepath="$PROJECT_DIR$/.idea/modules/customer-services.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-services.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-services.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-services.main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-services.main.iml" />
