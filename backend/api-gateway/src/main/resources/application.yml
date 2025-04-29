@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: api-gateway
+  docker:
+    compose:
+      enabled: false
+  cloud:
+    gateway:
+      routes:
+        - id: customer-service
+          uri: http://customer-services:8083
+          predicates:
+            - Path=/api/customers/**
+          filters:
+            - RewritePath=/api/customers, /customer
+            - RewritePath=/api/customers/(?<segment>.*), /customer/$\{segment}
+            
+        - id: order-service
+          uri: http://order-services:8081
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - RewritePath=/api/orders/(?<segment>.*), /order/$\{segment}
+            
+        - id: product-service
+          uri: http://product-services:8082
+          predicates:
+            - Path=/api/products/**
+          filters:
+            - RewritePath=/api/products/(?<segment>.*), /product/$\{segment}
+            
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            
+server:
+  port: 8080

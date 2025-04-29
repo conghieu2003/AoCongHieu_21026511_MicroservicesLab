@@ -10,7 +10,7 @@ import vn.edu.iuh.fit.dhktpm17a.customerservices.services.CustomerService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
